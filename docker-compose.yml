@@ -16,7 +16,7 @@ services:
       - ./back:/var/www/html
 
   db:
-    image: mysql:5.7
+    image: mariadb:10
     container_name: db
     volumes:
       - db_data:/var/lib/mysql

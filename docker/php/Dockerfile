@@ -14,7 +14,7 @@ RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl
 
 # PHP extensions
-RUN docker-php-ext-install pdo mysqli opcache
+RUN docker-php-ext-install pdo pdo_mysql opcache
 ADD config/php/php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Apache
@@ -23,27 +23,9 @@ ADD config/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 ADD config/apache/apache.conf /etc/apache2/conf-available/z-app.conf
 RUN a2enconf z-app
 
-# # Activation d'Apache mod_rewrite
-# RUN a2enmod rewrite
-
-# # On configure un vhost, pour ne pas avoir de public/ ou web/ dans l'URL
-# COPY config/default-vhost.conf /etc/apache2/sites-available/default-vhost.conf
-# # RUN a2dissite 000-default.conf
-# # RUN a2ensite default-vhost.conf
-
-# Cleaning
-# RUN rm -rf /etc/apache2/sites-available/* && rm -rf /etc/apache2/sites-enabled/*
-# RUN service apache2 restart
-
-# # Conf Apache2
-# RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-# COPY config/apache/default-vhost.conf /etc/apache2/sites-available/default-vhost.conf
-# RUN usermod -u 1000 www-data
-# RUN a2ensite default-vhost.conf
-# RUN service apache2 restart
-
 # SYMFONY-CLI
 RUN wget https://get.symfony.com/cli/installer -O - | bash\
  && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
+# GIT
 RUN git config --global user.email "mbegue.m@gmail.com" && git config --global user.name "Madieng MBEGUERE"
