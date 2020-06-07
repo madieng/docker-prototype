@@ -9,23 +9,22 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"\
 
 # PACKAGES
 
-RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++ wget curl git zip unzip
+RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++ wget curl git zlib1g-dev libzip-dev zip unzip
 RUN docker-php-ext-configure intl
-RUN docker-php-ext-install intl
+RUN docker-php-ext-install intl zip
 
 # PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql opcache
 ADD config/php/php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Apache
-ADD errors /errors
 ADD config/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 ADD config/apache/apache.conf /etc/apache2/conf-available/z-app.conf
 RUN a2enconf z-app
 
 # SYMFONY-CLI
 RUN wget https://get.symfony.com/cli/installer -O - | bash\
- && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+    && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 # GIT
 RUN git config --global user.email "mbegue.m@gmail.com" && git config --global user.name "Madieng MBEGUERE"
